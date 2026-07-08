@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>عيد ميلاد سعيد ✨</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================
+           1. CONFIGURATION & VARIABLES
+           ========================================== */
+        :root {
+            --primary-pink: #E8B4B8;
+            --light-pink: #FAF3F3;
+            --dark-pink: #A4777E;
+            --text-dark: #3A3335;
+            --text-muted: #8A7B7E;
+            --font-main: 'Tajawal', sans-serif;
+            --transition-speed: 0.7s;
+        }
+
+        /* ==========================================
+           2. GENERAL & BASE STYLES
+           ========================================== */
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body, html { width: 100%; height: 100%; overflow: hidden; font-family: var(--font-main); background-color: var(--light-pink); color: var(--text-dark); user-select: none; }
+        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at top, #FFF9F9 0%, #FAF3F3 50%, #EFE5E6 100%); z-index: 1; pointer-events: none; }
+
+        /* ==========================================
+           3. SCENE MANAGER & TRANSITIONS
+           ========================================== */
+        .scene { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1rem; text-align: center; z-index: 2; opacity: 0; pointer-events: none; transition: opacity var(--transition-speed) ease-in-out, transform var(--transition-speed) ease-in-out; transform: translateY(20px) scale(0.98); }
+        .scene.active { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
+        
+        .card { padding: 2rem 1rem; width: 100%; max-width: 500px; display: flex; flex-direction: column; align-items: center; gap: 2rem; }
+        h2 { font-size: 1.8rem; font-weight: 700; color: var(--text-dark); line-height: 1.5; margin-bottom: 0.5rem; }
+        .btn { font-family: var(--font-main); border: none; padding: 0.9rem 2.2rem; font-size: 1.15rem; font-weight: 700; border-radius: 50px; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 8px 20px rgba(0,0,0,0.06); z-index: 5; }
+        .btn-primary { background-color: var(--dark-pink); color: white; }
+        .btn-secondary { background-color: transparent; color: var(--dark-pink); border: 2px solid var(--primary-pink); }
+        .btn-full { width: 100%; margin-top: 1rem; }
+        .btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none !important; }
+
+        /* ==========================================
+           4. INTRO SCREEN
+           ========================================== */
+        #intro-scene { background-color: #2D2728; color: #ffffff; z-index: 10; }
+        #intro-scene .text-1 { font-size: 2rem; font-weight: 700; opacity: 0; transform: translateY(20px); transition: all 1s ease; color: #F5E6E8; }
+        #intro-scene .text-2 { font-size: 1.1rem; color: #A69B9D; margin-top: 1.5rem; opacity: 0; transition: all 1s ease; animation: pulse 2s infinite alternate; }
+
+        /* ==========================================
+           5. SCENE 1: BUTTONS
+           ========================================== */
+        .btn-container-s1 { display: flex; gap: 1rem; align-items: center; justify-content: center; width: 100%; min-height: 150px; }
+
+        /* ==========================================
+           6. SCENE 2: SLIDER
+           ========================================== */
+        .slider-wrapper { display: flex; flex-direction: column; align-items: center; height: 280px; margin: 1rem 0; position: relative; justify-content: space-between; }
+        .slider-label { font-weight: 700; font-size: 1.3rem; }
+        .slider-container { position: relative; height: 180px; width: 40px; display: flex; justify-content: center; align-items: center; }
+        #sad-emoji { position: absolute; bottom: -5px; font-size: 2.2rem; opacity: 0; transition: all 0.3s ease; z-index: 10; }
+        
+        .vertical-slider {
+            -webkit-appearance: none; appearance: none; width: 180px; height: 12px; border-radius: 10px; outline: none; position: absolute;
+            transform: rotate(-90deg);
+            background: linear-gradient(to right, #2ed573 0%, #eccc68 50%, #ff4757 100%);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .vertical-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none; width: 36px; height: 36px; border-radius: 50%; background: #fff; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border: 3px solid var(--text-dark); transition: transform 0.1s;
+        }
+
+        /* ==========================================
+           7. SCENE 3: CAKE
+           ========================================== */
+        .simple-cake { width: 350px; height: auto; margin: 1rem 0; cursor: grab; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.1)); -webkit-user-drag: none; }
+        .simple-cake:active { cursor: grabbing; }
+        .cake-container { position: relative; width: 350px; height: 350px; display: flex; justify-content: center; align-items: center; }
+
+        /* ==========================================
+           8. SCENE 4 & LETTER OVERLAY
+           ========================================== */
+        .envelope-wrapper { position: relative; width: 280px; height: 180px; margin-top: 1rem; cursor: pointer; background: #FDFBFC; border-radius: 8px; box-shadow: 0 12px 30px rgba(164, 119, 126, 0.15); border: 1px solid #F0E6E8; }
+        .envelope-front { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; border-left: 140px solid #F8F4F5; border-right: 140px solid #F8F4F5; border-bottom: 90px solid #F3ECED; border-top: 90px solid transparent; border-radius: 0 0 8px 8px; z-index: 4; pointer-events: none; }
+        .envelope-flap { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 140px solid transparent; border-right: 140px solid transparent; border-top: 100px solid #FDFBFC; transform-origin: top; transition: transform 0.7s cubic-bezier(0.165, 0.84, 0.44, 1); z-index: 5; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.04)); }
+        .envelope-wrapper.open .envelope-flap { transform: rotateX(180deg); z-index: 1; }
+        .heart-seal { position: absolute; top: 80px; left: 50%; transform: translateX(-50%); width: 40px; height: 40px; background: var(--dark-pink); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 1.2rem; z-index: 6; transition: opacity 0.3s ease; box-shadow: 0 4px 10px rgba(164, 119, 126, 0.4); }
+        .envelope-wrapper.open .heart-seal { opacity: 0; }
+
+        .letter-popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(45, 39, 40, 0.6); backdrop-filter: blur(6px); z-index: 20; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; display: flex; justify-content: center; align-items: center; padding: 1.5rem; }
+        .letter-popup-overlay.active { opacity: 1; pointer-events: auto; }
+        .letter { width: 100%; max-width: 380px; background: #FFFEFC; border-radius: 12px; padding: 2.5rem; box-shadow: 0 25px 50px rgba(0,0,0,0.15); transform: translateY(60px) scale(0.95); transition: all 0.7s cubic-bezier(0.165, 0.84, 0.44, 1); position: relative; overflow: visible; display: flex; flex-direction: column; }
+        .letter::before { content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 6px; background: var(--dark-pink); border-radius: 0 12px 12px 0; }
+        
+        .letter-corner-img { position: absolute; top: -25px; left: -25px; width: 90px; height: auto; object-fit: contain; border: none; z-index: 10; box-shadow: none; background: transparent; pointer-events: none; }
+
+        .letter-popup-overlay.active .letter { transform: translateY(0) scale(1); }
+        .letter-header { text-align: right; font-weight: 700; color: var(--dark-pink); font-size: 1.3rem; margin-bottom: 1rem; }
+        .letter-body { text-align: justify; line-height: 1.8; font-size: 1.1rem; color: #5A4E50; margin-bottom: 1.5rem; }
+        .letter-footer { text-align: left; font-weight: 700; color: var(--dark-pink); font-size: 1.2rem; margin-bottom: 1.5rem; }
+
+        /* ==========================================
+           9. SCENE 5: GIFTS MENU
+           ========================================== */
+        .gifts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; margin-top: 1rem; }
+        .gift-img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 16px; cursor: pointer; box-shadow: 0 8px 20px rgba(164, 119, 126, 0.2); transition: transform 0.3s; animation: gentle-shake 3s infinite ease-in-out; }
+        .gift-img:hover { transform: scale(1.05); }
+        .gift-img:nth-child(1) { animation-delay: 0s; } .gift-img:nth-child(2) { animation-delay: 0.7s; }
+        .gift-img:nth-child(3) { animation-delay: 1.4s; } .gift-img:nth-child(4) { animation-delay: 2.1s; }
+
+        @keyframes gentle-shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-3deg) translateY(-2px); }
+            50% { transform: rotate(3deg) translateY(0px); }
+            75% { transform: rotate(-1deg) translateY(-1px); }
+        }
+
+        /* ==========================================
+           10. EFFECTS & ANIMATIONS
+           ========================================== */
+        @keyframes pulse { from { opacity: 0.5; } to { opacity: 1; } }
+        .bounce-active { animation: bounce 0.6s ease; }
+        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .heart-particle { position: fixed; pointer-events: none; z-index: 999; animation: floatUp 2.5s ease-out forwards; }
+        @keyframes floatUp { 0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; } 100% { transform: translateY(-200px) scale(0.6) rotate(45deg); opacity: 0; } }
+        .confetti { position: fixed; width: 8px; height: 16px; border-radius: 4px; z-index: 999; animation: fall 3s ease-out forwards; }
+        @keyframes fall { 0% { transform: translateY(-50px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+
+        /* ==========================================
+           تنسيقات الهدايا 
+           ========================================== */
+        .bugatti-container { text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        .bugatti-logo { width: 100px; animation: bounce 2s infinite ease-in-out; margin-bottom: -10px; z-index: 2; position: relative;}
+        
+        .contract-box { background: #FCFAFA; border: 1px solid #C2B280; border-radius: 4px; padding: 30px 20px; width: 100%; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        .contract-box::before { content: ''; position: absolute; top: 6px; left: 6px; right: 6px; bottom: 6px; border: 1px solid #E5D8B0; pointer-events: none; }
+        .contract-title { color: #2C3E50; font-weight: 900; font-size: 1.5rem; margin-bottom: 20px; border-bottom: 2px solid #D4AF37; display: inline-block; padding-bottom: 5px; }
+        .contract-text { font-size: 1.05rem; line-height: 1.8; margin-bottom: 25px; color: #444; font-weight: 500; }
+        
+        .evade-area { position: relative; height: 160px; width: 100%; border-top: 1px dashed #ccc; padding-top: 20px; }
+        .btn-dodge { position: absolute; transition: top 0.2s ease-out, left 0.2s ease-out, transform 0.2s; font-size: 1rem; padding: 0.7rem 1.5rem; z-index: 10; left: 50%; top: 20px; transform: translateX(-50%); }
+        .btn-reject { position: absolute; font-size: 1rem; padding: 0.7rem 1.5rem; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 5; background-color: #eee; border: none; color: var(--text-dark); }
+        
+        .bugatti-result { display: none; margin-top: 30px; font-size: 1.4rem; color: var(--dark-pink); font-weight: 900; animation: pulse 1.5s infinite alternate; line-height: 1.6; }
+        .bugatti-result span { font-size: 1.1rem; color: #666; display: block; margin-top: 15px; font-weight: 700; }
+
+        .elegant-counter { font-size: 1.6rem; color: var(--dark-pink); font-weight: 900; margin: 20px 0; display: flex; justify-content: center; align-items: center; gap: 10px; direction: rtl; }
+        .elegant-counter span { display: inline-block; padding: 8px 15px; background: #FFFEFC; border-bottom: 3px solid var(--primary-pink); border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .counter-quote { font-size: 1.3rem; color: var(--text-dark); margin-top: 10px; font-weight: 700; }
+
+        .quiz-opt { margin-bottom: 12px; font-size: 1.1rem; padding: 1rem; width: 100%; transition: all 0.3s ease; }
+        .quiz-opt:not(:disabled):hover { background-color: var(--primary-pink); color: white; transform: scale(1.02); }
+        
+        .progress-bar-bg { width: 100%; height: 22px; background: #EFE5E6; border-radius: 15px; margin: 25px 0; overflow: hidden; position: relative; box-shadow: inset 0 3px 6px rgba(0,0,0,0.05); }
+        .progress-bar-fill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary-pink), var(--dark-pink)); transition: width 0.3s ease; border-radius: 15px; }
+
+        .msg-display { min-height: 120px; display: flex; justify-content: center; align-items: center; padding: 20px; margin-bottom: 20px; background: #FFFEFC; border: 2px dashed var(--primary-pink); border-radius: 16px; transition: all 0.3s; width: 100%; }
+        .msg-text { font-size: 1.3rem; color: var(--dark-pink); font-weight: 700; line-height: 1.6; text-align: center; opacity: 1; transition: opacity 0.3s; }
+
+        /* ==========================================
+           تنسيقات نافذة التعليق لأسئلة الاختبار
+           ========================================== */
+        #quiz-comment-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(45, 39, 40, 0.7); backdrop-filter: blur(4px);
+            z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+            display: flex; justify-content: center; align-items: center; padding: 2rem;
+        }
+        #quiz-comment-overlay.active { opacity: 1; pointer-events: auto; }
+        .quiz-comment-box {
+            background: #FFFEFC; border-radius: 16px; padding: 2.5rem 1.5rem; width: 100%; max-width: 350px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center;
+            font-size: 1.5rem; font-weight: 900; color: var(--dark-pink);
+            transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 3px solid var(--primary-pink);
+        }
+        #quiz-comment-overlay.active .quiz-comment-box { transform: scale(1); }
+        
+    </style>
+</head>
+<body>
+
+    <div class="bg-overlay"></div>
+
+    <section id="intro-scene" class="scene active">
+        <div class="text-1" id="intro-t1">✨ عندي سؤال صغير…</div>
+        <div class="text-2" id="intro-t2">اضغطي أي مكان بالشاشة</div>
+    </section>
+
+    <section id="scene-1" class="scene">
+        <div class="card">
+            <h2>عيد ميلاد مين اليوم؟ 🎀</h2>
+            <div class="btn-container-s1">
+                <button id="btn-no" class="btn btn-secondary">ما بعرف 😛</button>
+                <button id="btn-yes" class="btn btn-primary">أنا!</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="scene-2" class="scene">
+        <div class="card">
+            <h2>كم تتوقعي نسبة حماسي لليوم ؟</h2>
+            <div class="slider-wrapper">
+                <span class="slider-label" style="color: #ff4757;">0%</span>
+                <div class="slider-container">
+                    <input type="range" id="love-slider" class="vertical-slider" min="0" max="100" value="50">
+                </div>
+                <div id="sad-emoji">😿</div>
+                <span class="slider-label" style="color: #2ed573;">100%</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="scene-3" class="scene">
+        <div class="card">
+            <h2>اقطعي الكيكة!</h2>
+            <div class="cake-container" id="cake-wrapper">
+                <img src="cake.png" id="the-cake" class="simple-cake" alt="Cake" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'320\' height=\'320\' viewBox=\'0 0 100 100\'><path d=\'M20 70 Q 50 85 80 70 L 80 40 Q 50 55 20 40 Z\' fill=\'%23E8B4B8\'/><path d=\'M20 40 Q 50 55 80 40 Q 50 25 20 40 Z\' fill=\'%23FAF3F3\' stroke=\'%23A4777E\' stroke-width=\'1.5\'/><rect x=\'48\' y=\'15\' width=\'4\' height=\'15\' fill=\'%23A4777E\' rx=\'2\'/><circle cx=\'50\' cy=\'10\' r=\'3.5\' fill=\'%23D4AF37\'/></svg>'">
+            </div>
+        </div>
+    </section>
+
+    <section id="scene-4" class="scene">
+        <div class="card">
+            <h2>عندي الك رسالة افتحيها!</h2>
+            <div class="envelope-wrapper" id="envelope-wrapper">
+                <div class="envelope-front"></div>
+                <div class="envelope-flap"></div>
+                <div class="heart-seal">❤</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="letter-popup-overlay" id="letter-overlay">
+        <article class="letter">
+            <img src="https://via.placeholder.com/150/E8B4B8/FFFFFF?text=صورة" alt="صورة الزاوية" class="letter-corner-img">
+            <div class="letter-header" id="recipient-name">عزيزتي</div>
+            <p class="letter-body" id="birthday-message">النص يوضع هنا.</p>
+            <div class="letter-footer" id="sender-name"></div>
+            <button id="btn-go-gifts" class="btn btn-primary btn-full">كملي ما خلصنا!</button>
+        </article>
+    </div>
+
+    <section id="scene-gifts" class="scene">
+        <div class="card">
+            <h2>هدايا صغيرة الك!</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">اختاري اللي بدك اياها</p>
+            <div class="gifts-grid">
+                <img src="https://via.placeholder.com/300/E8B4B8/FFFFFF?text=الهدية+1" class="gift-img" onclick="openGift('gift-1')" alt="هدية 1">
+                <img src="https://via.placeholder.com/300/A4777E/FFFFFF?text=الهدية+2" class="gift-img" onclick="openGift('gift-2')" alt="هدية 2">
+                <img src="https://via.placeholder.com/300/E8B4B8/FFFFFF?text=الهدية+3" class="gift-img" onclick="openGift('gift-3')" alt="هدية 3">
+                <img src="https://via.placeholder.com/300/A4777E/FFFFFF?text=الهدية+4" class="gift-img" onclick="openGift('gift-4')" alt="هدية 4">
+            </div>
+        </div>
+    </section>
+
+    <section id="gift-1" class="scene">
+        <div class="card">
+            <div class="bugatti-container">
+                <div id="bugatti-ui" style="width: 100%;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/60/Bugatti_logo.svg" alt="Bugatti" class="bugatti-logo">
+                    <div class="contract-box">
+                        <div class="contract-title">عقد تنازل رسمي</div>
+                        <p class="contract-text">
+                            نحن، شركة Bugatti Motors، نعرض عليكِ استلام إدارة وكيان الشركة بالكامل تقديراً لكِ في هذا اليوم المميز.<br><br>يرجى تحديد قرارك أدناه:
+                        </p>
+                        <div class="evade-area" id="evade-area">
+                            <button class="btn btn-primary btn-dodge" id="btn-accept">موافقة على العرض</button>
+                            <button class="btn btn-secondary btn-reject" id="btn-reject" onclick="rejectBugatti()">رفض العرض</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bugatti-result" id="bugatti-result">
+                    اصلا حتى بوغاتي كلها ما تغلى عليكي
+                    <span>طيب شو رأيك المرة الجاي نجرب سيفورا ؟</span>
+                </div>
+            </div>
+            <button class="btn btn-secondary btn-full" onclick="backToGifts('gift-1')" style="margin-top: auto;">الرجوع للهدايا</button>
+        </div>
+    </section>
+
+    <section id="gift-2" class="scene">
+        <div class="card">
+            <h2>من اول لحظة عرفتك فيها لليوم!</h2>
+            
+            <div class="elegant-counter">
+                <div><span id="c-days">0</span> يوم</div>
+                <div><span id="c-hours">0</span> ساعة</div>
+                <div><span id="c-mins">0</span> دقيقة</div>
+            </div>
+            
+            <p class="counter-quote">كل لحظة بتمر معك سبيسيال</p>
+            <button class="btn btn-secondary btn-full" onclick="backToGifts('gift-2')">الرجوع للهدايا</button>
+        </div>
+    </section>
+
+    <section id="gift-3" class="scene">
+        
+        <div class="card" id="quiz-step-1">
+            <h2>امتحان صغير جدن عنك 👌🏻</h2>
+            <p class="counter-quote" id="quiz-counter" style="margin-top: 0;">السؤال 1 / 5</p>
+            
+            <div class="msg-display" style="padding: 15px; margin: 10px 0;">
+                <div class="msg-text" id="quiz-question">جاري التحميل...</div>
+            </div>
+            
+            <div id="quiz-options-container" style="width: 100%; display: flex; flex-direction: column;">
+            </div>
+            
+            <button class="btn btn-secondary btn-full" onclick="backToGifts('gift-3')" style="margin-top: 20px;">الرجوع للهدايا</button>
+        </div>
+
+        <div class="card" id="quiz-step-2" style="display: none;">
+            <h2>خلينا نشوف كم وحدة صح 🤓</h2>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="quiz-progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="card" id="quiz-step-3" style="display: none; text-align: center;">
+            <h2>✨ النتيجة ✨</h2>
+            <p style="font-size: 1.5rem; line-height: 1.8; color: var(--text-dark); margin: 20px 0 5px 0; font-weight: bold;" id="quiz-final-score">
+            </p>
+            <p style="font-size: 1.2rem; line-height: 1.5; color: var(--dark-pink); margin-bottom: 20px; font-weight: bold;" id="quiz-final-msg">
+            </p>
+            <button class="btn btn-secondary btn-full" onclick="backToGifts('gift-3')" style="margin-top: 15px;">الرجوع للهدايا</button>
+        </div>
+        
+    </section>
+
+    <section id="gift-4" class="scene">
+        <div class="card">
+            <h2>كل ما تحسي انك زعلانة افتحي رسالة</h2>
+            <div class="msg-display">
+                <div class="msg-text" id="random-msg">اضغطي على الزر لفتح أول رسالة ✨</div>
+            </div>
+            <button class="btn btn-primary btn-full" id="btn-random-msg" onclick="showRandomMessage()">افتحي رسالة</button>
+            <button class="btn btn-secondary btn-full" onclick="backToGifts('gift-4')">الرجوع للهدايا</button>
+        </div>
+    </section>
+
+    <div id="quiz-comment-overlay">
+        <div class="quiz-comment-box" id="quiz-comment-text">التعليق هنا</div>
+    </div>
+
+    <script>
+        const CONFIG = {
+            recipientName: "بيني", 
+            senderName: "عبدالله",
+            message: "كل عام وانتِ احلى وألطف من كبر ، اكثر يوم سبيسيال بالسنة زيك الله يسعدك ويحميكِ وتحققي كل احلام احلى وحدة تصير 18 وعقبال الـ100 سنة واحلى اشي صار معاي اليوم وكل يوم :)"
+        };
+
+        document.getElementById('recipient-name').innerText = `عزيزتي ${CONFIG.recipientName} ✨`;
+        document.getElementById('sender-name').innerText = CONFIG.senderName;
+        document.getElementById('birthday-message').innerText = CONFIG.message;
+
+        function navigateToScene(currentId, nextId) {
+            const current = document.getElementById(currentId);
+            const next = document.getElementById(nextId);
+            current.classList.remove('active');
+            setTimeout(() => { next.classList.add('active'); }, 600);
+        }
+
+        /* ---------------- INTRO ---------------- */
+        setTimeout(() => {
+            document.getElementById('intro-t1').style.opacity = '1';
+            document.getElementById('intro-t1').style.transform = 'translateY(0)';
+        }, 500);
+        setTimeout(() => { document.getElementById('intro-t2').style.opacity = '1'; }, 1500);
+
+        document.getElementById('intro-scene').addEventListener('click', () => {
+            navigateToScene('intro-scene', 'scene-1');
+        });
+
+        /* ---------------- SCENE 1 ---------------- */
+        const btnNo = document.getElementById('btn-no');
+        const btnYes = document.getElementById('btn-yes');
+        let clickCount = 0; let yesScale = 1; let noScale = 1;
+
+        btnNo.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (clickCount < 6) {
+                clickCount++; yesScale += 0.3; noScale -= 0.12;
+                btnYes.style.transform = `scale(${yesScale})`;
+                btnNo.style.transform = `scale(${noScale})`;
+                const randomX = (Math.random() - 0.5) * 30;
+                const randomY = (Math.random() - 0.5) * 30;
+                btnNo.style.translate = `${randomX}px ${randomY}px`;
+            }
+        });
+
+        btnYes.addEventListener('click', () => {
+            btnYes.classList.add('bounce-active');
+            setTimeout(() => { navigateToScene('scene-1', 'scene-2'); }, 600);
+        });
+
+        /* ---------------- SCENE 2: SLIDER ---------------- */
+        const slider = document.getElementById('love-slider');
+        const sadEmoji = document.getElementById('sad-emoji');
+        let scene2Done = false;
+        
+        slider.addEventListener('input', () => {
+            if (scene2Done) return;
+            let val = parseInt(slider.value);
+            
+            if (val < 20) {
+                sadEmoji.style.opacity = '1';
+                sadEmoji.style.transform = 'translateY(-15px) scale(1.1)';
+            } else {
+                sadEmoji.style.opacity = '0';
+                sadEmoji.style.transform = 'translateY(0) scale(1)';
+            }
+
+            if (val > 85) {
+                scene2Done = true;
+                slider.disabled = true;
+                createConfetti();
+                setTimeout(() => { navigateToScene('scene-2', 'scene-3'); }, 600);
+            }
+        });
+
+        function resetSlider() {
+            if (!scene2Done) {
+                slider.value = 50;
+                sadEmoji.style.opacity = '0';
+                sadEmoji.style.transform = 'translateY(0) scale(1)';
+            }
+        }
+        slider.addEventListener('touchend', resetSlider);
+        slider.addEventListener('mouseup', resetSlider);
+
+        /* ---------------- SCENE 3: CAKE SWIPE ---------------- */
+        const theCake = document.getElementById('the-cake');
+        const cakeWrapper = document.getElementById('cake-wrapper');
+        let cakeCut = false; let startX = 0; let startY = 0;
+
+        function handleSwipeStart(e) {
+            if (cakeCut) return;
+            startX = e.changedTouches ? e.changedTouches[0].screenX : e.screenX;
+            startY = e.changedTouches ? e.changedTouches[0].screenY : e.screenY;
+        }
+
+        function handleSwipeEnd(e) {
+            if (cakeCut) return;
+            let endX = e.changedTouches ? e.changedTouches[0].screenX : e.screenX;
+            let endY = e.changedTouches ? e.changedTouches[0].screenY : e.screenY;
+            let diffX = Math.abs(endX - startX);
+            let diffY = Math.abs(endY - startY);
+
+            if (diffX > 40 || diffY > 40) {
+                cakeCut = true;
+                const cakeSrc = theCake.src;
+                theCake.style.display = 'none'; 
+                
+                const leftHalf = document.createElement('img');
+                leftHalf.src = cakeSrc; leftHalf.style.position = 'absolute'; leftHalf.style.width = '100%';
+                leftHalf.style.clipPath = 'polygon(0 0, 50% 0, 50% 100%, 0 100%)';
+                leftHalf.style.transition = 'transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 1.2s';
+                
+                const rightHalf = document.createElement('img');
+                rightHalf.src = cakeSrc; rightHalf.style.position = 'absolute'; rightHalf.style.width = '100%';
+                rightHalf.style.clipPath = 'polygon(50% 0, 100% 0, 100% 100%, 50% 100%)';
+                rightHalf.style.transition = 'transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 1.2s';
+
+                cakeWrapper.appendChild(leftHalf);
+                cakeWrapper.appendChild(rightHalf);
+
+                requestAnimationFrame(() => {
+                    leftHalf.style.transform = 'translate(-40px, 30px) rotate(-15deg)';
+                    rightHalf.style.transform = 'translate(40px, 30px) rotate(15deg)';
+                    leftHalf.style.opacity = '0';
+                    rightHalf.style.opacity = '0';
+                });
+                
+                createConfetti(); createHeartsBurst();
+                setTimeout(() => { navigateToScene('scene-3', 'scene-4'); }, 1500);
+            }
+        }
+
+        cakeWrapper.addEventListener('touchstart', handleSwipeStart);
+        cakeWrapper.addEventListener('touchend', handleSwipeEnd);
+        cakeWrapper.addEventListener('mousedown', handleSwipeStart);
+        cakeWrapper.addEventListener('mouseup', handleSwipeEnd);
+
+        /* ---------------- SCENE 4: ENVELOPE & LETTER ---------------- */
+        const envelopeWrapper = document.getElementById('envelope-wrapper');
+        const letterOverlay = document.getElementById('letter-overlay');
+
+        envelopeWrapper.addEventListener('click', () => {
+            envelopeWrapper.classList.add('open');
+            setTimeout(() => {
+                letterOverlay.classList.add('active');
+                createHeartsBurst();
+            }, 800);
+        });
+
+        document.getElementById('btn-go-gifts').addEventListener('click', () => {
+            letterOverlay.classList.remove('active');
+            setTimeout(() => {
+                document.getElementById('scene-4').classList.remove('active');
+                document.getElementById('scene-gifts').classList.add('active');
+            }, 500);
+        });
+
+        /* ---------------- GIFTS NAVIGATION & RESET LOGIC ---------------- */
+        function openGift(giftId) { 
+            if(giftId === 'gift-1') {
+                document.getElementById('bugatti-ui').style.display = 'block';
+                document.getElementById('bugatti-result').style.display = 'none';
+            } else if(giftId === 'gift-3') {
+                currentQIndex = 0;
+                score = 0;
+                document.getElementById('quiz-step-1').style.display = 'block';
+                document.getElementById('quiz-step-2').style.display = 'none';
+                document.getElementById('quiz-step-3').style.display = 'none';
+                loadQuizQuestion();
+            } else if(giftId === 'gift-4') {
+                document.getElementById('random-msg').innerText = "اضغطي على الزر لفتح أول رسالة ✨";
+                lastMsgIndex = -1;
+            }
+            navigateToScene('scene-gifts', giftId); 
+        }
+
+        function backToGifts(currentGiftId) { 
+            navigateToScene(currentGiftId, 'scene-gifts'); 
+        }
+
+        /* ---------------- FX FUNCTIONS ---------------- */
+        function createConfetti() {
+            const colors = ['#E8B4B8', '#A4777E', '#FAF3F3', '#D4AF37'];
+            for (let i = 0; i < 70; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('confetti');
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = '-20px';
+                particle.style.transform = `scale(${Math.random() * 0.7 + 0.3})`;
+                particle.style.animationDelay = Math.random() * 0.5 + 's';
+                particle.style.animationDuration = Math.random() * 2 + 2 + 's';
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 4000);
+            }
+        }
+
+        function createHeartsBurst() {
+            for (let i = 0; i < 18; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart-particle');
+                heart.innerHTML = Math.random() > 0.5 ? '✨' : '❤';
+                heart.style.left = (Math.random() * 60 + 20) + 'vw';
+                heart.style.top = (Math.random() * 40 + 30) + 'vh';
+                heart.style.fontSize = (Math.random() * 12 + 12) + 'px';
+                heart.style.color = Math.random() > 0.5 ? 'var(--dark-pink)' : '#D4AF37';
+                heart.style.animationDelay = (Math.random() * 0.4) + 's';
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 2500);
+            }
+        }
+
+        /* ==========================================
+           منطق الهدايا
+           ========================================== */
+
+        // -- الهدية 1: عقد Bugatti --
+        const evadeArea = document.getElementById('evade-area');
+        const btnAccept = document.getElementById('btn-accept');
+
+        function dodgeAcceptBtn() {
+            const areaRect = evadeArea.getBoundingClientRect();
+            const btnRect = btnAccept.getBoundingClientRect();
+            
+            const maxX = areaRect.width - btnRect.width;
+            const maxY = areaRect.height - btnRect.height;
+            
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+            
+            btnAccept.style.transform = 'none';
+            btnAccept.style.left = `${randomX}px`;
+            btnAccept.style.top = `${randomY}px`;
+        }
+
+        btnAccept.addEventListener('mouseover', dodgeAcceptBtn);
+        btnAccept.addEventListener('touchstart', (e) => { e.preventDefault(); dodgeAcceptBtn(); }, {passive: false});
+
+        function rejectBugatti() {
+            document.getElementById('bugatti-ui').style.display = 'none';
+            const resultMsg = document.getElementById('bugatti-result');
+            resultMsg.style.display = 'block';
+            createHeartsBurst();
+        }
+
+        // -- الهدية 2: العداد الزمني --
+        const startDate = new Date('October 16, 2025 18:13:00 GMT+0300').getTime();
+        
+        function updateCounter() {
+            const now = new Date().getTime();
+            let diff = now - startDate;
+            if (diff < 0) diff = 0; 
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const min = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+            document.getElementById('c-days').innerText = d;
+            document.getElementById('c-hours').innerText = h;
+            document.getElementById('c-mins').innerText = min;
+        }
+        setInterval(updateCounter, 1000); 
+
+        // -- الهدية 3: اختبار التوافق (المعدل) --
+        const quizQuestions = [
+            { q: "شو اكثر اشي بتحبيه منهم ؟", opts: ["هيلو كيتي", "موز بحليب", "انا ( اختاريني انا الصح )", "فراولة"], correctIndex: 2, comment: "اكثر من الباقي بشوي بس " },
+            { q: "مين اكثر وحدة بتحبيها من بنات خواتك ؟", opts: ["ايلينا", "رتيل", "مسك", "كلهم اكيد !"], correctIndex: 0, comment: "طبعا كلهم بس ايلينا بنتك ! " },
+            { q: "شو اكثر شغلة حلوة فيكِ ؟", opts: ["جمالك", "شخصيتك", "لما تتدلعي", "عنادك الحلو"], correctIndex: 0, comment: "كل اشي فيكِ حلو ليش بتجاوبي ؟ " },
+            { q: "شو في مسلسل بتحبيه ؟", opts: ["الحب الخفي", "انطلق", "عندما اطير نحوك", "الصقيع الاول"], correctIndex: 1, comment: "ترا بتذكر انه انطلق هه " },
+            { q: "مين احسن حدا عرفتيه ؟", opts: ["اكيد انت", "عبدالله", "عبود", "عبودي"], anyCorrect: true, comment: "جد ! شكرا شكرا 😻 " }
+        ];
+
+        let currentQIndex = 0;
+        let score = 0;
+
+        function loadQuizQuestion() {
+            if (currentQIndex >= quizQuestions.length) {
+                showAnalyzingScreen();
+                return;
+            }
+
+            document.getElementById('quiz-counter').innerText = `السؤال ${currentQIndex + 1} / 5`;
+            document.getElementById('quiz-question').innerText = quizQuestions[currentQIndex].q;
+            
+            const optionsContainer = document.getElementById('quiz-options-container');
+            optionsContainer.innerHTML = '';
+            optionsContainer.style.opacity = '0';
+
+            quizQuestions[currentQIndex].opts.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn btn-secondary quiz-opt';
+                btn.innerText = opt;
+                btn.onclick = () => handleOptionClick(btn, index);
+                optionsContainer.appendChild(btn);
+            });
+
+            setTimeout(() => { 
+                optionsContainer.style.transition = 'opacity 0.4s'; 
+                optionsContainer.style.opacity = '1'; 
+            }, 50);
+        }
+
+        function handleOptionClick(clickedBtn, selectedIndex) {
+            const btns = document.querySelectorAll('.quiz-opt');
+            btns.forEach(b => {
+                b.disabled = true;
+                b.style.pointerEvents = 'none';
+            });
+
+            const qData = quizQuestions[currentQIndex];
+
+            // منطق السؤال الثالث اللي كله غلط
+            if (qData.noneCorrect) {
+                clickedBtn.style.backgroundColor = '#ff4757';
+                clickedBtn.style.borderColor = '#ff4757';
+                clickedBtn.style.color = 'white';
+            } 
+            else if (qData.anyCorrect || selectedIndex === qData.correctIndex) {
+                clickedBtn.style.backgroundColor = '#2ed573';
+                clickedBtn.style.borderColor = '#2ed573';
+                clickedBtn.style.color = 'white';
+                score++;
+            } else {
+                clickedBtn.style.backgroundColor = '#ff4757';
+                clickedBtn.style.borderColor = '#ff4757';
+                clickedBtn.style.color = 'white';
+
+                if (qData.correctIndex !== undefined) {
+                    btns[qData.correctIndex].style.backgroundColor = '#2ed573';
+                    btns[qData.correctIndex].style.borderColor = '#2ed573';
+                    btns[qData.correctIndex].style.color = 'white';
+                }
+            }
+
+            setTimeout(() => {
+                const commentOverlay = document.getElementById('quiz-comment-overlay');
+                document.getElementById('quiz-comment-text').innerText = qData.comment;
+                commentOverlay.classList.add('active');
+
+                setTimeout(() => {
+                    commentOverlay.classList.remove('active');
+                    setTimeout(() => {
+                        currentQIndex++;
+                        loadQuizQuestion();
+                    }, 400); 
+                }, 2000); 
+            }, 800); 
+        }
+
+        function showAnalyzingScreen() {
+            document.getElementById('quiz-step-1').style.display = 'none';
+            document.getElementById('quiz-step-2').style.display = 'flex';
+            
+            let progress = 0;
+            const bar = document.getElementById('quiz-progress-fill');
+            
+            const progressInt = setInterval(() => {
+                progress += Math.random() * 15 + 10;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(progressInt);
+                    setTimeout(() => {
+                        document.getElementById('quiz-step-2').style.display = 'none';
+                        document.getElementById('quiz-step-3').style.display = 'flex';
+                        
+                        document.getElementById('quiz-final-score').innerText = `جبتي ${score} من ${quizQuestions.length} 🤍`;
+                        
+                        const msgEl = document.getElementById('quiz-final-msg');
+                        if (score === quizQuestions.length) {
+                            msgEl.innerText = "شطورة بيان !! جبتيهم كلهم صح مين مغششك";
+                        } else {
+                            msgEl.innerText = "اصلا انتي دايما صح عادي";
+                        }
+
+                        createHeartsBurst();
+                    }, 600);
+                }
+                bar.style.width = `${progress}%`;
+            }, 400);
+        }
+
+        loadQuizQuestion();
+
+        // -- الهدية 4: الرسائل العشوائية --
+        const messages = [
+            "اضحكي بحب ضحكتك 3>",
+            "لا تخلي اشي يزعل عيونك الحلوين :)",
+            "ابتسمي شوي الابتسامة بتلبقلك ✨",
+            "شكرا لانك موجودة بحياتي 🌷",
+            "انعم واخف دم انتِ 🦋",
+            "انتِ نعمة كبيرة 🙏🏻",
+            "احلى واشطر مهندزة ! 📐",
+            "يارب تكون ايامك بتشبه قلبك 🤍",
+            "وجودك لحاله هدية 🎁",
+            "انتِ سبيسيال كل حدا بحياتك 🌟",
+            "حتى لو الكل ضدك ، انا دايما معك 🫂",
+            "ضحكتك احلى اشي 😍",
+            "انتِ حدا ما بتكرر 💎",
+            "لا تنسي تهتمي بحالك 🌸",
+            "اليوم لازم تضحكي كثير 😄",
+            "اتمنى اشوفك دايما مبسوطة 💖",
+            "انتِ احلى صدفة 💫",
+            "تذكري دايما انك سبيسيال ✨",
+            "ترا وجودك بفرق كثير ❤️",
+            "لا تنسي لاي درجة انتِ حلوة 🥺",
+            "مافي اثنين بيان ابدا ! 👑",
+            "ديري بالك على حالك لانك بتهميني 🌺",
+            "انتِ من الناس اللي مستحيل انساهم 💌",
+            "يارب تضل عيونك تضحك دايما 🥰",
+            "بحب اشوفك مبسوطة 🎈",
+            "شكرا لانك انتِ 🌹",
+            "لا تخافي من بكرا ، انتِ قدها 💪",
+            "الله لا يحرمني ضحكتك 🤲",
+            "كل عام وانتِ حلوة 🎂",
+            "وجودك بحياتي من الاشياء اللي بقدرها كثير 🌟",
+            "لا تنسي انك حدا بستاهل كل الحب 💗",
+            "انتِ دايما احلى من ما تتخيلي 🧚‍♀️",
+            "بتمنى اكون دايما سبب ابتسامتك 😊",
+            "كم بيان عندي انا ! 🫶",
+            "ان شاء الله انبسطي اليوم وكل يوم 🎉",
+            "الله يسعدها بيونة 🌷",
+            "الله لا يضرك احلى بيان 🧿",
+            "ولككك ما شاء الله عليكي 😻",
+            "لا تزعلي مني 3>",
+            "مهما صار مستحيل انساكي ♾️",
+            "تذكري دايما انك شطورة 🥇",
+            "اكثر حدا مميز بعرفه (: ✨"
+        ];
+        
+        let lastMsgIndex = -1;
+        let msgTimeout;
+
+        function showRandomMessage() {
+            const msgBox = document.getElementById('random-msg');
+            const btn = document.getElementById('btn-random-msg');
+            
+            // لمنع الضغط السريع وتجنب تداخل الرسائل
+            btn.disabled = true;
+            
+            let newIndex;
+            do { newIndex = Math.floor(Math.random() * messages.length); } while (newIndex === lastMsgIndex);
+            lastMsgIndex = newIndex;
+            
+            // إخفاء الرسالة الحالية
+            msgBox.style.opacity = '0';
+            
+            clearTimeout(msgTimeout);
+            
+            // تغيير النص بعد الاختفاء الكامل وإعادته للظهور
+            msgTimeout = setTimeout(() => {
+                msgBox.innerText = messages[newIndex];
+                msgBox.style.opacity = '1';
+                createHeartsBurst(); 
+                
+                // إعادة تفعيل الزر بعد الانتهاء التام من التأثير
+                setTimeout(() => { btn.disabled = false; }, 350);
+            }, 350); // هذا الوقت يسمح للـ CSS transition إنه يخلص بدون ما تبين رسالتين فوق بعض
+        }
+    </script>
+</body>
+</html>
